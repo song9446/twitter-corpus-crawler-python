@@ -1,6 +1,14 @@
 # twitter-corpus-crawler-python
 deadly simple python based twitter crawler to gethering corpuses
-
+```python
+from tccp import search
+for tweet in search("microsoft", 3): 
+    print(tweet["contents"])
+# => (fetch contents of three recent tweets)
+# New Deal:Microsoft Office Professional Plus 2016Price:\u20ac9.95 Delivery:24h Just 24h left! https://t.co/UdmXlHWvcQ
+# Microsoft Office 365 \u2013 https://t.co/CJFadmm3yT
+# Visit the Snapzu "tribe" of the hour: /hashtag/Microsoft?src=hash - Feel free to submit related blog posts or media!
+```
 # usage
 ```python
 # search
@@ -19,7 +27,7 @@ for tweet in search("trump", 10):
     print(tweet["mentions"])
 
 # fetch infinitly
-for tweet in search("North korea"): 
+for tweet in search("attack"): 
     print(tweet)
     break
 
@@ -33,7 +41,7 @@ for conversation in search_conversation("North korea", 10):
     # each tweet has same properties as result of searching
     print("the first tweet of conversations: " + conversation[0])
 
-for conversation in search_conversation("North korea"):
+for conversation in search_conversation("please"):
     print(conversation)
     break
 ```
