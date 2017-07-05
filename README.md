@@ -1,13 +1,13 @@
 # twitter-corpus-crawler-python
 deadly simple python based twitter crawler to gethering corpuses
 
-# Usage
+# usage
 ```python
 # search
 from tccp import search
 
 # fetch 10 recent results of searching
-for tweet in search("North korea", 10):
+for tweet in search("trump", 10):
     # properties
     print(tweet["author"])
     print(tweet["contents"])
@@ -15,7 +15,7 @@ for tweet in search("North korea", 10):
     print(tweet["has_parent_tweet"])
     print(tweet["num_replies"])
     print(tweet["num_retweet"])
-    print(tweet["num_relike"])
+    print(tweet["num_like"])
     print(tweet["mentions"])
 
 # fetch infinitly

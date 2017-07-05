@@ -14,7 +14,7 @@ REQ_PARAMS = {
 }
 REQ_TIMEOUT = 2
 SEARCH_ADDRESS = "https://twitter.com/i/search/timeline"
-TWEET_ADDRESS = "https://twitter.com/%s/status/%s" # user-id / conversation-id
+TWEET_ADDRESS = "https://twitter.com/%s/status/%s" # % (user-id, conversation-id)
 REQ_HEADERS = {
     "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Ubuntu Chromium/58.0.3029.110 Chrome/58.0.3029.110 Safari/537.36",
     "upgrade-insecure-requests": "1",
@@ -97,7 +97,10 @@ def fatch_conversation(author, tweet_id):
         author, p = raw_parse(html, "data-screen-name=\"", "\"", p)
         contents, p = raw_parse(html, "js-tweet-text-container\">", '</div>', p)
         contents = distruct_html(contents)
-        tweets.append({"author": author, "tweet_id": tweet_id, "permalink_path": permalink_path, "mentions": mentions, "has-parent-tweet": bool(has_parent_tweet), "contents": contents})
+        num_replies, p = raw_parse(html, "data-tweet-stat-count=\"", "\"", p)
+        num_retweet, p = raw_parse(html, "data-tweet-stat-count=\"", "\"", p)
+        num_like, p = raw_parse(html, "data-tweet-stat-count=\"", "\"", p)
+        tweets.append({"author": author, "tweet_id": tweet_id, "permalink-path": permalink_path, "num_replies": int(num_replies), "has_parent_tweet": bool(has_parent_tweet), "contents": contents, "mentions": mentions, "num_retweet": num_retweet, "num_like": num_like, })
     return tweets
 
 def raw_parse(text, start, end, offset=0):
@@ -134,5 +137,5 @@ if __name__ == '__main__':
     num = int(sys.argv[2])
     for tweet in search(keyword, num):
         print(tweet)
-    #for conversation in search_conversation(keyword, num):
-    #    print(conversation)
+    for conversation in search_conversation(keyword, num):
+        print(conversation)
