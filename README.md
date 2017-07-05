@@ -4,10 +4,9 @@ deadly simple python based twitter crawler to gethering corpuses
 from tccp import search
 for tweet in search("microsoft", 3): 
     print(tweet["contents"])
-# => (fetch contents of three recent tweets)
-# New Deal:Microsoft Office Professional Plus 2016Price:\u20ac9.95 Delivery:24h Just 24h left! https://t.co/UdmXlHWvcQ
-# Microsoft Office 365 \u2013 https://t.co/CJFadmm3yT
-# Visit the Snapzu "tribe" of the hour: /hashtag/Microsoft?src=hash - Feel free to submit related blog posts or media!
+# => New Deal:Microsoft Office Professional Plus 2016Price:\u20ac9.95 Delivery:24h Just 24h left! https://t.co/UdmXlHWvcQ
+# => Microsoft Office 365 \u2013 https://t.co/CJFadmm3yT
+# => Visit the Snapzu "tribe" of the hour: /hashtag/Microsoft?src=hash - Feel free to submit related blog posts or media!
 ```
 # usage
 ```python
