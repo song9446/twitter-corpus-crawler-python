@@ -1,5 +1,5 @@
 # twitter-corpus-crawler-python
-python based twitter crawler to gethering corpuses
+deadly simple python based twitter crawler to gethering corpuses
 
 # Usage
 ```python
@@ -29,15 +29,11 @@ from tccp import search_conversation
 # fetch 10 recent conversation with keyword
 for conversation in search_conversation("North korea", 10):
     print("conversation length: " + len(conversation))
-    # conversation is list of tweetssss
+    # conversation is list of tweets
     # each tweet has same properties as result of searching
     print("the first tweet of conversations: " + conversation[0])
 
 for conversation in search_conversation("North korea"):
     print(conversation)
     break
-from tccp import search
-
-for tweet in search("North korea", 10):
-    print tweet
 ```
