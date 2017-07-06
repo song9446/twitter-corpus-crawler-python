@@ -26,8 +26,8 @@ REQ_HEADERS = {
 
 #MAX_POSITION_TAIL = "BD1UO2FFu9QAAAAAAAAETAAAAAcAAAASAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 
-def search_conversation(query, num=-1):
-    searching= search(query) 
+def search_conversation(params, num=-1):
+    searching= search(params) 
     while num != 0:
         tweet = next(searching)
         if (tweet["num_replies"] == 0 and not tweet["has_parent_tweet"]): continue
@@ -36,9 +36,10 @@ def search_conversation(query, num=-1):
         yield conversation
         num -= 1
 
-def search(query, num=-1):
+def search(_params, num=-1):
     params = REQ_PARAMS.copy()
-    params["q"] = query
+    for i in _params:
+        params[i] = _params[i]
     max_position = None
     max_tweet = None
     min_tweet = None
