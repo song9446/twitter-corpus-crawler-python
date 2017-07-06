@@ -136,7 +136,7 @@ if __name__ == '__main__':
         exit(2)
     keyword = sys.argv[1]
     num = int(sys.argv[2])
-    for tweet in search(keyword, num):
+    for tweet in search({"q": keyword}, num):
         print(tweet)
-    for conversation in search_conversation(keyword, num):
+    for conversation in search_conversation({"q": keyword}, num):
         print(conversation)
