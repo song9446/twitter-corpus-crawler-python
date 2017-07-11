@@ -37,7 +37,7 @@ for tweet in search({"q": "trump"}, 10):
     print(tweet["num_like"])
     print(tweet["mentions"])
 
-# fetch infinitly
+# fetch tweets infinitly
 for tweet in search({"q": "attack"}): 
     print(tweet)
     break
@@ -52,6 +52,7 @@ for conversations in search_conversation({"q": "North korea"}, 10):
     # each tweet has same properties as result of searching
     print("the first tweet of conversations: " + conversation[0])
 
+# fetch conversations infinitly
 for conversation in search_conversation({"q": "please"}):
     print(conversation)
     break
