@@ -18,7 +18,7 @@ for conversation in search_conversation({"q":"sexy", "l": "en"}, 1):
 # => lyndeyhighan: i hate to brag but this is my boyfriend
 # => condorsix: This the sexiest dude I know on god
 # => vasquezlaziah21: Umm......con?
-# => convdorsix: Bro peep that man. You can't tell ur homie he a sexy dude are u really his homie?
+# => condorsix: Bro peep that man. You can't tell ur homie he a sexy dude are u really his homie?
 ```
 # usage
 ```python
