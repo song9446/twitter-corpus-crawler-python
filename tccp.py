@@ -31,10 +31,11 @@ def search_conversation(params, num=-1):
     while num != 0:
         tweet = next(searching)
         if (tweet["num_replies"] == 0 and not tweet["has_parent_tweet"]): continue
-        conversation = fatch_conversation(tweet["author"], tweet["tweet_id"])
-        if len(conversation) < 2: continue
-        yield conversation
-        num -= 1
+        conversations = fatch_conversation(tweet["author"], tweet["tweet_id"])
+        for conversation in conversations:
+            if len(conversation) < 2: continue
+            yield conversation
+            num -= 1
 
 def search(_params, num=-1):
     params = REQ_PARAMS.copy()
@@ -78,15 +79,20 @@ def search(_params, num=-1):
         except Exception as e:
             print(e)
 
-def fatch_conversation(author, tweet_id):
+def fatch_conversation(author, _tweet_id):
     while True:
         try:
-            res = requests.get(TWEET_ADDRESS % (author, tweet_id), headers=REQ_HEADERS, timeout=REQ_TIMEOUT)
+            res = requests.get(TWEET_ADDRESS % (author, _tweet_id), headers=REQ_HEADERS, timeout=REQ_TIMEOUT)
             break
         except Exception as e:
             print(e)
     html = res.text
     tweets = []
+    conversation = []
+    default_conversation = []
+    after = False
+    last = False
+    last_author = False
     p = 0
     while True:
         tweet_html, _ = raw_parse(html, "class=\"tweet ", ">", p)
@@ -101,7 +107,30 @@ def fatch_conversation(author, tweet_id):
         num_replies, p = raw_parse(html, "data-tweet-stat-count=\"", "\"", p)
         num_retweet, p = raw_parse(html, "data-tweet-stat-count=\"", "\"", p)
         num_like, p = raw_parse(html, "data-tweet-stat-count=\"", "\"", p)
-        tweets.append({"author": author, "tweet_id": tweet_id, "permalink-path": permalink_path, "num_replies": int(num_replies), "has_parent_tweet": bool(has_parent_tweet), "contents": contents, "mentions": mentions, "num_retweet": num_retweet, "num_like": num_like, })
+        tweet = {"author": author, "tweet_id": tweet_id, "permalink-path": permalink_path, "num_replies": int(num_replies), "has_parent_tweet": bool(has_parent_tweet), "contents": contents, "mentions": mentions, "num_retweet": num_retweet, "num_like": num_like, }
+        if not last and last_author == author and mentions == author:
+            if conversation is not None and len(conversation) > 0:
+                tweet["contents"] = conversation.pop()["contents"]
+            elif len(default_conversation) > 0:
+                tweet["contents"] = default_conversation.pop()["contents"]
+        if not after and _tweet_id != tweet_id:
+            default_conversation.append(tweet)
+        elif not after: 
+            default_conversation.append(tweet)
+            conversation = default_conversation.copy()
+            after = True
+        else:
+            conversation.append(tweet)
+            if last:
+                last = False
+                tweets.append(conversation)
+                conversation = default_conversation.copy()
+            conv, p = raw_parse(tweet_html, "\"ThreadedConversation-", "\"", p)
+            if conv is None: break
+            if conv in ("tweet last", "-loneTweet"):
+                last = True
+    if len(tweets) == 0:
+        tweets.append(default_conversation)
     return tweets
 
 def raw_parse(text, start, end, offset=0):
@@ -113,8 +142,10 @@ def raw_parse(text, start, end, offset=0):
     return text[s:e], e
     
 DISTURCT_HTML_RULE = [
-    (r'<a\s+href="([^"]+)"[^>]*>.*</a>' , r' \1'), # show links instead of texts
-    (r'\s+', ' '), # replace consecutive whitespace
+    (r'<a\s+href="([^"]+)"[^>]*>.*</a>' , r''), # remove all links
+    #(r'<a\s+href="([^"]+)"[^>]*>.*</a>' , r' \1'), # show links instead of texts
+    (r' +', ' '), # replace consecutive whitespace
+    (r'[\n]+', '\n'), # multiple newline to single newline
     (r'\s*<br\s*/?>\s*', '\n'), # newline after a <br>
     (r'[ \t]*<[^<]*?/?>', ''), # remove remaining tags
     (r'&nbsp;', ' '), 
@@ -136,7 +167,9 @@ if __name__ == '__main__':
         exit(2)
     keyword = sys.argv[1]
     num = int(sys.argv[2])
-    for tweet in search({"q": keyword}, num):
-        print(tweet)
+    #for tweet in search({"q": keyword}, num):
+    #    print(tweet)
     for conversation in search_conversation({"q": keyword}, num):
-        print(conversation)
+        for tweet in conversation:
+            print(tweet["author"] + ": " + tweet["contents"])
+        print("\n")
