@@ -9,7 +9,7 @@ for tweet in search({"q":"microsoft"}, 3):
 # => Microsoft Office 365 \u2013 https://t.co/CJFadmm3yT
 # => Visit the Snapzu "tribe" of the hour: /hashtag/Microsoft?src=hash - Feel free to submit related blog posts or media!
 ```
-2. *fetch some number of the result conversations of keword searching in twitter*
+2. fetch some number of the result conversations of keword searching in twitter
 ```python
 from tccp import search_conversation
 for conversation in search_conversation({"q":"sexy", "l": "en"}, 1): 
@@ -20,7 +20,7 @@ for conversation in search_conversation({"q":"sexy", "l": "en"}, 1):
 # => vasquezlaziah21: Umm......con?
 # => condorsix: Bro peep that man. You can't tell ur homie he a sexy dude are u really his homie?
 ```
-3. *continue searching from the last searched tweet(even if terminated by exception when last searching)*
+3. continue searching from the last searched tweet(even if terminated by exception when last searching)
 ```python
 from tccp import search
 for tweet in search({"q":"microsoft"}, 1, continue_path="last_searching.tmp"): 
@@ -30,6 +30,14 @@ for tweet in search({"q":"microsoft"}, 1, continue_path="last_searching.tmp"):
 for tweet in search({"q":"microsoft"}, 1, continue_path="last_searching.tmp"): 
     print(tweet["contents"])
 # => Microsoft Office 365 \u2013 https://t.co/CJFadmm3yT
+```
+
+4. fetching tweets without keywords
+```python
+from tccp import search
+for tweet in search({"l":"en"}, 3): 
+    print(tweet["contents"])
+# it fatches whatever 3 tweets from englisher.
 ```
 
 # usage
@@ -78,4 +86,9 @@ for conversation in search_conversation({"q": "please"}, continue_path="path_for
 
 for conversation in search_conversation({"q": "please"}, continue_path="path_for_last_searching_file.tmp"):
     print(conversation)
+
+# fetch conversations without keywords
+for conversation in search_conversation({"l": "en"}):
+    print(conversation)
+
 ```
