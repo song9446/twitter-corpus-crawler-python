@@ -20,6 +20,18 @@ for conversation in search_conversation({"q":"sexy", "l": "en"}, 1):
 # => vasquezlaziah21: Umm......con?
 # => condorsix: Bro peep that man. You can't tell ur homie he a sexy dude are u really his homie?
 ```
+3. *continue searching from the last searched tweet(even if terminated by exception when last searching)*
+```python
+from tccp import search
+for tweet in search({"q":"microsoft"}, 1, continue_path="last_searching.tmp"): 
+    print(tweet["contents"])
+# => New Deal:Microsoft Office Professional Plus 2016Price:\u20ac9.95 Delivery:24h Just 24h left! https://t.co/UdmXlHWvcQ
+
+for tweet in search({"q":"microsoft"}, 1, continue_path="last_searching.tmp"): 
+    print(tweet["contents"])
+# => Microsoft Office 365 \u2013 https://t.co/CJFadmm3yT
+```
+
 # usage
 ```python
 # search
@@ -56,4 +68,14 @@ for conversations in search_conversation({"q": "North korea"}, 10):
 for conversation in search_conversation({"q": "please"}):
     print(conversation)
     break
+
+# fetch conversations continuesly
+for conversation in search_conversation({"q": "please"}, continue_path="path_for_last_searching_file.tmp"):
+    # load the last searching state at the path
+    # it keeps saving last searching state to the path.
+    print(conversation)
+    break
+
+for conversation in search_conversation({"q": "please"}, continue_path="path_for_last_searching_file.tmp"):
+    print(conversation)
 ```
