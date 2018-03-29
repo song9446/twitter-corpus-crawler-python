@@ -99,7 +99,7 @@ def search(_params, num=-1, continue_path=None):
             max_tweet = min_tweet
         except Exception as e:
             print(e)
-    f.close()
+    if f: f.close()
 
 def fatch_conversation(author, _tweet_id):
     while True:
